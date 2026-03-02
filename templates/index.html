@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>EREN MONITOR | Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo"><i class="fas fa-eye"></i> EREN MONITOR</div>
+        <nav>
+            <a href="#" class="active"><i class="fas fa-chart-pie"></i> Overview</a>
+            <a href="javascript:void(0)" onclick="openModal()"><i class="fas fa-cog"></i> Configurações</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <header>
+            <h1>Painel de Monitoramento</h1>
+            <p>Análise de mercado em **Capela, SE**</p>
+        </header>
+
+        <section class="card search-box">
+            <input type="text" id="urlInput" placeholder="Cole o link do Mercado Livre aqui...">
+            <button class="btn-primary" onclick="scanLink()">Verificar</button>
+        </section>
+
+        <section class="stats-grid">
+            <div class="card" style="animation-delay: 0.1s;">
+                <span>Preço Atual</span>
+                <h2>R$ {{ eixos_y[-1] if eixos_y else '0,00' }}</h2>
+            </div>
+            <div class="card" style="animation-delay: 0.2s;">
+                <span>Média do Período</span>
+                <h2>R$ {{ stats.media }}</h2>
+            </div>
+            <div class="card" style="animation-delay: 0.3s;">
+                <span>Total de Scans</span>
+                <h2>{{ stats.total }}</h2>
+            </div>
+        </section>
+
+        <div class="card chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </main>
+
+    <div id="configModal" class="modal">
+        <div class="modal-content card">
+            <h3>Configurações</h3>
+            <button class="btn-danger" onclick="resetar()">Resetar Banco de Dados</button>
+            <button class="btn-close" onclick="closeModal()">Sair</button>
+        </div>
+    </div>
+
+    <script>
+        // Lógica do Gráfico
+        new Chart(document.getElementById('myChart'), {
+            type: 'line',
+            data: {
+                labels: {{ eixos_x|safe }},
+                datasets: [{
+                    label: 'Variação R$',
+                    data: {{ eixos_y|safe }},
+                    borderColor: '#58a6ff',
+                    backgroundColor: 'rgba(88, 166, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // Funções de Interface
+        function openModal() { document.getElementById('configModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('configModal').style.display = 'none'; }
+        function scanLink() {
+            const url = document.getElementById('urlInput').value;
+            fetch('/add_link', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url}) })
+            .then(res => res.json()).then(data => { alert(data.message); location.reload(); });
+        }
+        function resetar() { if(confirm("Apagar histórico?")) fetch('/reset', {method:'POST'}).then(() => location.reload()); }
+    </script>
+</body>
+</html>
