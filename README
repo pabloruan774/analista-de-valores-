@@ -1,0 +1,51 @@
+
+👁️ EREN MONITOR - Sistema de Monitoramento de Preços
+O EREN MONITOR é uma aplicação web desenvolvida para automatizar a captura, o armazenamento e a análise visual de preços de produtos em e-commerces (foco inicial em hardware e periféricos). O projeto nasceu da necessidade de identificar o momento ideal de compra através de dados históricos reais.
+
+🚀 Funcionalidades Principais
+Coleta de Dados Dinâmica: Utiliza Web Scraping para extrair preços diretamente de links do Mercado Livre.
+
+Monitoramento On-Demand: Interface que permite ao usuário colar uma URL e atualizar o banco de dados instantaneamente.
+
+Visualização Analítica: Gráficos interativos que mostram a variação de preço ao longo do tempo.
+
+Métricas em Tempo Real: Cálculo automático de média de preço, valor mínimo e total de capturas realizadas.
+
+UI Minimalista: Dashboard em Dark Mode com animações suaves e design focado em experiência do usuário (UX).
+
+🛠️ Tecnologias Utilizadas
+Linguagem: Python 3.12
+
+Framework Web: Flask
+
+Web Scraping: BeautifulSoup4 & Requests
+
+Banco de Dados: SQLite3 (Persistência local)
+
+Front-end: HTML5, CSS3 (Custom Animations), JavaScript & Chart.js
+
+📂 Estrutura do Projeto
+Plaintext
+├── app.py              # Servidor Flask e rotas da API
+├── scraper.py          # Robô de coleta de dados (Scraper)
+├── database.db         # Banco de Dados SQLite
+├── static/
+│   └── style.css       # Estilização Minimalista e Animações
+└── templates/
+    └── index.html      # Dashboard e lógica Front-end
+⚙️ Como Executar o Projeto
+Clone o repositório:
+
+Bash
+git clone https://github.com/seu-usuario/eren-monitor.git
+Crie um ambiente virtual e instale as dependências:
+
+Bash
+python -m venv venv
+.\venv\bin\activate
+pip install flask beautifulsoup4 requests
+Inicie o servidor:
+
+Bash
+python app.py
+Acesse no navegador: http://127.0.0.1:5000
